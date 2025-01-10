@@ -16,7 +16,6 @@ Challenge accepted by ["Fetch"](https://github.com/fetch-rewards/receipt-process
 - Generates an amount of points based on receipt contents
 - Requires a json body following the schema defined in `receipt.yml`
     ```json
-    // Example
         {
             "retailer": "Test Store",
             "purchaseDate": "2025-01-09",
