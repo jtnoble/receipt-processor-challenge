@@ -12,7 +12,7 @@ def index():
     return "Receipt Processor Challenge API Live"
 
 '''
-/receipts/process GET
+/receipts/process POST
 * Allows json data sent matching specified schema
 * If data is not validated, return 400 error
 '''
