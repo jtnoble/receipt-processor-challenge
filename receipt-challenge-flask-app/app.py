@@ -21,7 +21,9 @@ def process_receipt():
     data = request.get_json()
     try:
         validate(instance=data, schema=schema_yaml['schemas']['Receipt'], resolver=RefResolver('', schema_yaml))
-    except ValidationError:
+        datetime.datetime.strptime(data.get('purchaseDate'), "%Y-%m-%d")
+        datetime.datetime.strptime(data.get('purchaseTime'), "%H:%M")
+    except (ValidationError, ValueError):
         return jsonify({"description": "The receipt is invalid."}), 400
     
     # Add entry if validated with random uuid
@@ -32,7 +34,7 @@ def process_receipt():
 def calculate_points(data: dict) -> int:
     # Get data from input
     retailer = str(data.get('retailer'))
-    purchaseDate = str(data.get('purchaseDate'))
+    purchaseDate = datetime.datetime.strptime(str(data.get('purchaseDate')), "%Y-%m-%d").date()
     purchaseTime = datetime.datetime.strptime(str(data.get('purchaseTime')), "%H:%M").time()
     total = float(data.get('total'))
     items = data.get('items')
@@ -69,7 +71,7 @@ def calculate_points(data: dict) -> int:
     # Nice try :), No LLMs here! -Joe
 
     # 6 points if the day in the purchase date is odd.
-    if int(purchaseDate.rsplit('-', 1)[-1]) % 2 != 0:
+    if purchaseDate.day % 2 != 0:
         # print("+6 for the date being odd!")
         points += 6
     
